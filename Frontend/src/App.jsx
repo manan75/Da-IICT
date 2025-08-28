@@ -1,20 +1,27 @@
-
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import Chat from './chat'
+import { AuthProvider } from './context/authContext.jsx'
+import { ProtectedRoute } from './context/protectedRoute.jsx'
+import AuthPages from './pages/AuthPages.jsx'
+import Dashboard from './pages/Dashboard.jsx'
 
 function App() {
-  
-
   return (
-    <>
-     <div className="App">
-      <h1 className="text-xl font-bold mb-4">My Chat App</h1>
-      {/* Example: userId=1 chatting with userId=2 */}
-      <Chat userId={1} receiverId={2} />
-    </div>
-      </>
-       
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<AuthPages />} />
+          <Route path="/login" element={<AuthPages />} />
+          <Route path="/register" element={<AuthPages />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 
-export default App
+export default App;

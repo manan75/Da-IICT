@@ -24,7 +24,7 @@ app.use(cors({
 }));
 
 //? Routes
-app.use("/api/v1/", authRouter);
+app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 
 app.get("/api/v1/", (req, res) => {

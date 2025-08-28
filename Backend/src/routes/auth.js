@@ -57,7 +57,7 @@ authRouter.post("/signin", async (req, res) => {
       }
 
       const isMatch = await bcrypt.compare(password, existingUser.password);
-      console.log(existingUser)
+      // console.log(existingUser)
       if (isMatch) {
          const token = jwt.sign({ id: existingUser.id }, JWT_PASSWORD, {expiresIn: '24h'});
          res.status(200).json({
@@ -75,5 +75,35 @@ authRouter.post("/signin", async (req, res) => {
       })
    }
 })
+
+authRouter.post("/verify-token", async (req, res) => {
+   try {
+      const header = req.headers["authorization"];
+      const decoded = jwt.verify(header, JWT_PASSWORD);
+      
+      if (decoded) {
+         // Fetch user data from database
+         const user = await prisma.user.findUnique({
+            where: { id: decoded.id },
+            select: { id: true, name: true, email: true } // Don't return password
+         });
+         
+         if (user) {
+            res.status(200).json({ valid: true, user });
+         } else {
+            res.status(404).json({ message: "User not found" });
+         }
+      } else {
+         res.status(403).json({
+            message: "You are not logged in"
+         });
+      }
+   } catch (error) {
+      res.status(403).json({
+         message: "Invalid token"
+      });
+   }
+});
+
 
 export default authRouter;
