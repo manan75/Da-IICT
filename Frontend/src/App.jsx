@@ -4,6 +4,7 @@ import { AuthProvider } from './context/authContext.jsx'
 import { ProtectedRoute } from './context/protectedRoute.jsx'
 import AuthPages from './pages/AuthPages.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import PageNotFound from './pages/PageNotFound.jsx'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<AuthPages />} />
           <Route path="/login" element={<AuthPages />} />
           <Route path="/register" element={<AuthPages />} />
+          <Route path="*" element={<PageNotFound/>} />
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />
