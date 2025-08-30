@@ -4,12 +4,15 @@ import { AuthProvider } from './context/authContext.jsx'
 import { ProtectedRoute } from './context/protectedRoute.jsx'
 import AuthPages from './pages/AuthPages.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import Weather from './pages/weathercheck.jsx'
+
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route path='/weather' element={<Weather/>}></Route>
           <Route path="/" element={<AuthPages />} />
           <Route path="/login" element={<AuthPages />} />
           <Route path="/register" element={<AuthPages />} />
