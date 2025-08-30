@@ -8,10 +8,10 @@ locations = {
     "Kanyakumari": (8.0883, 77.5385)
 }
 
-# Forecast API (wind, air pressure)
+# Forecast API (wind, air pressure, rainfall)
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 forecast_params = {
-    "hourly": "windspeed_10m,winddirection_10m,windgusts_10m,surface_pressure"
+    "hourly": "windspeed_10m,winddirection_10m,windgusts_10m,surface_pressure,precipitation,rain,showers"
 }
 
 # Marine API (waves, sea surface temp)
@@ -44,6 +44,14 @@ for name, (lat, lon) in locations.items():
     wind_cardinal = deg_to_cardinal(wd) if wd is not None else "N/A"
     print(f"  Wind Speed: {ws:.1f} m/s | Direction: {wd:.0f}° ({wind_cardinal}) | Gust: {gust if gust else 'N/A'} m/s")
     print(f"  Air Pressure: {sp:.1f} hPa" if sp else "  Air Pressure: N/A")
+
+    # Rainfall / precipitation
+    precipitation = f_hourly.get("precipitation", [None])[0]
+    rain = f_hourly.get("rain", [None])[0]
+    showers = f_hourly.get("showers", [None])[0]
+    print(f"  Precipitation (total): {precipitation if precipitation is not None else 'N/A'} mm")
+    print(f"  Rainfall: {rain if rain is not None else 'N/A'} mm")
+    print(f"  Showers: {showers if showers is not None else 'N/A'} mm")
 
     # Marine API request
     m_params = marine_params | {"latitude": lat, "longitude": lon}
